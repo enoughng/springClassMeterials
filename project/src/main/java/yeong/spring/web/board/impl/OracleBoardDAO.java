@@ -71,6 +71,7 @@ public class OracleBoardDAO implements BoardDAO{
 		try {
 			conn = JDBCUtil.getConnection();
 			pstmt = conn.prepareStatement(BoardSQLStatement.BOARD_GET);
+			pstmt.setInt(1, vo.getSeq());
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				board = new BoardVO();
