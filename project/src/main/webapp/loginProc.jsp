@@ -1,13 +1,13 @@
 <%@page import="yeong.spring.web.user.UserVO"%>
 <%@page import="yeong.spring.web.user.impl.UserDAO"%>
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <%
-	//	1. »ç¿ëÀÚÀÇ ÀÔ·Â Á¤º¸ ÃßÃâ
+	//	1. ì‚¬ìš©ìžì˜ ìž…ë ¥ ì •ë³´ ì¶”ì¶œ
 	String id = request.getParameter("id");
 	String password = request.getParameter("password");
 	
-	//	2. µ¥ÀÌÅÍº£ÀÌ½º ¿¬µ¿ Ã³¸® 
+	//	2. ë°ì´í„°ë² ì´ìŠ¤ ì—°ë™ ì²˜ë¦¬ 
 	UserVO vo = new UserVO();
 	vo.setId(id);
 	vo.setPassword(password);
@@ -15,7 +15,7 @@
 	UserDAO userDAO = new yeong.spring.web.user.impl.UserDAO();
 	UserVO user = userDAO.getUser(vo);
 	
-	//	3. È­¸é ³×ºñ°ÔÀÌ¼Ç ( È­¸é ÀÌµ¿ )
+	//	3. í™”ë©´ ë„¤ë¹„ê²Œì´ì…˜ ( í™”ë©´ ì´ë™ )
 	if(user != null) {
 		response.sendRedirect("getBoardList.jsp");
 	} else {
