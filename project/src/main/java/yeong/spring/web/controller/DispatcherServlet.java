@@ -19,9 +19,20 @@ import yeong.spring.web.user.impl.UserDAO;
 /**
  * Servlet implementation class DispatcherServlet
  */
-//@WebServlet(name = "action", urlPatterns = { "*.do" })
+@WebServlet(name = "action", urlPatterns = { "*.do" })
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private HandlerMapping handlerMapping;
+	private ViewResolver viewResolver;
+
+	@Override
+	public void init() throws ServletException {
+		handlerMapping = new HandlerMapping();
+		viewResolver = new ViewResolver();
+		viewResolver.setPrefix("./");
+		viewResolver.setSuffix(".jsp");
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -30,134 +41,34 @@ public class DispatcherServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
 		processRequest(request, response);
 	}
 
-	private void processRequest(HttpServletRequest request, HttpServletResponse response)
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		// 1. 클라이언트 정보를 추출한다.
+		
+		//1. 클라이언트(사용자)의 요청 정보 추출
 		String uri = request.getRequestURI();
 		String path = uri.substring(uri.lastIndexOf("/"));
 		System.out.println(path);
-
-		// 2. 처리 : 데이터베이스 연동 처리
-		if (path.equals("/login.do")) {
-			System.out.println("로그인 처리");
-			String id = request.getParameter("id");
-			String password = request.getParameter("password");
-
-			// 2. 데이터베이스 연동 처리
-			UserVO vo = new UserVO();
-			vo.setId(id);
-			vo.setPassword(password);
-
-			UserDAO userDAO = new UserDAO();
-			UserVO user = userDAO.getUser(vo);
-
-			// 3. 화면 네비게이션 ( 화면 이동 )
-			if (user != null) {
-				response.sendRedirect("getBoardList.do");
-			} else {
-				response.sendRedirect("login.jsp");
-			}
-		} else if (path.equals("/logout.do")) {
-			
-			HttpSession session = request.getSession(false);
-			// 1. 브라우저와 연결된 세션 객체를 종료
-			session.invalidate();
-
-			// 2. 세션 종료 후 메인 화면으로 이동
-			response.sendRedirect("login.jsp");
-			
-			
-		} else if (path.equals("/insertBoard.do")) {
-			
-//			request.setCharacterEncoding("utf-8");
-			String title = request.getParameter("title");
-			String writer = request.getParameter("writer");
-			String content = request.getParameter("content");
-
-			// 2. 데이터베이스 연동 처리
-			BoardVO vo = new BoardVO();
-			vo.setTitle(title);
-			vo.setWriter(writer);
-			vo.setContent(content);
-			
-			BoardDAO boardDAO = new OracleBoardDAO();
-			boardDAO.insertBoard(vo);
-			
-			// 3. 화면 네비게이션
-			response.sendRedirect("getBoardList.do");
-			
-		} else if (path.equals("/updateBoard.do")) {
-
-//			request.setCharacterEncoding("utf-8");
-			String title = request.getParameter("title");
-			String content = request.getParameter("content");
-			String seq = request.getParameter("seq");
-			System.out.println(seq);
-			
-			// 2. 데이터 베이스 연동 처리
-			BoardVO vo = new BoardVO();
-			vo.setTitle(title);
-			vo.setContent(content);
-			vo.setSeq(Integer.parseInt(seq));
-			
-			BoardDAO boardDAO = new OracleBoardDAO();
-			boardDAO.updateBoard(vo);
-			
-			// 3. 화면 네비게이션
-			response.sendRedirect("getBoardList.do");
-			
-		} else if (path.equals("/deleteBoard.do")) {
-			
-			String seq = request.getParameter("seq");
-			
-			// 2. 데이터 베이스 연동
-			BoardVO vo = new BoardVO();
-			vo.setSeq(Integer.parseInt(seq));
-			
-			BoardDAO boardDAO = new OracleBoardDAO();
-			boardDAO.deleteBoard(vo);
-			
-			// 3. 화면 네비게이션
-			response.sendRedirect("getBoardList.do");
-			
-			
-		} else if (path.equals("/getBoard.do")) {
-
-			System.out.println("글 상세 보기 처리");
-			// 1. 검색할 게시글 번호 추출
-			String seq = request.getParameter("seq");
-
-			// 2. 데이터베이스 연동 처리
-			BoardVO vo = new BoardVO();
-			vo.setSeq(Integer.parseInt(seq));
-
-			BoardDAO boardDAO = new OracleBoardDAO();
-			BoardVO board = boardDAO.getBoard(vo);
-
-			// 3. 화면 네비게이션
-			HttpSession session = request.getSession();
-			session.setAttribute("board", board);
-			response.sendRedirect("getBoard.jsp");
-		} else if (path.equals("/getBoardList.do")) {
-
-			System.out.println("글 목록 보기 처리");
-			// 1. 사용자의 입력 정보 추출
-			// 2. 데이터베이스 연동 처리
-			BoardVO vo2 = new BoardVO();
-			OracleBoardDAO boardDAO = new OracleBoardDAO();
-			List<BoardVO> boardList = boardDAO.getBoardList(vo2);
-			// 3. 화면 네비게이션
-			HttpSession session = request.getSession();
-			session.setAttribute("boardList", boardList);
-			response.sendRedirect("getBoardList.jsp");
+		
+		//2. HanddlerMapping을 통해 경로(path)에 해당하는 Controller를 검색
+		Controller controller = handlerMapping.getController(path);
+		
+		//3. 검색된 Controller를 실행한다.
+		String viewName = controller.handleRequest(request, response);
+		
+		//4. viewResolver를 통해 viewName에 해당하는 화면을 검색한다.
+		String view = null;
+		
+		if(!viewName.contains(".do")) {
+			view = viewResolver.getView(viewName);
 		} else {
-			System.out.println("잘못된 경로입니다 : " + path);
+			view = viewName;
 		}
+		
+		// 5. 검색 된 화면으로 이동한다. 원래대로 라면 포워딩!
+		response.sendRedirect(view);
 	}
 
 }
