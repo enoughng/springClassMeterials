@@ -5,13 +5,15 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
 import yeong.spring.web.board.impl.OracleBoardDAO;
-import yeong.spring.web.controller.Controller;
 
 public class UpdateBoardController implements Controller {
 
 	@Override
-	public String handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		request.setCharacterEncoding("utf-8");
 		String title = request.getParameter("title");
@@ -28,7 +30,10 @@ public class UpdateBoardController implements Controller {
 		BoardDAO boardDAO = new OracleBoardDAO();
 		boardDAO.updateBoard(vo);
 		
-		return "getBoardList.do";
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:getBoardList.do");
+		
+		return mav;
 	}
 
 }

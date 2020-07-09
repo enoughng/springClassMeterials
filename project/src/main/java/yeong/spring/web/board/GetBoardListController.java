@@ -7,12 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
 import yeong.spring.web.board.impl.OracleBoardDAO;
-import yeong.spring.web.controller.Controller;
 
 public class GetBoardListController implements Controller {
 	@Override
-	public String handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		System.out.println("글 목록 보기 처리");
 		// 1. 사용자의 입력 정보 추출
@@ -21,8 +23,9 @@ public class GetBoardListController implements Controller {
 		OracleBoardDAO boardDAO = new OracleBoardDAO();
 		List<BoardVO> boardList = boardDAO.getBoardList(vo);
 		// 3. 화면 네비게이션
-		HttpSession session = request.getSession();
-		session.setAttribute("boardList", boardList);
-		return "getBoardList";
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("getBoardList");
+		mav.addObject("boardList", boardList);
+		return mav;
 	}
 }

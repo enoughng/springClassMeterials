@@ -4,15 +4,16 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
 
 import yeong.spring.web.board.impl.OracleBoardDAO;
-import yeong.spring.web.controller.Controller;
 
 public class GetBoardController implements Controller {
 
 	@Override
-	public String handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("글 상세 보기 처리");
 		// 1. 검색할 게시글 번호 추출
 		String seq = request.getParameter("seq");
@@ -25,9 +26,10 @@ public class GetBoardController implements Controller {
 		BoardVO board = boardDAO.getBoard(vo);
 
 		// 3. 화면 네비게이션
-		HttpSession session = request.getSession();
-		session.setAttribute("board", board);
-		return "getBoard";
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("getBoard");
+		mav.addObject("board", board);
+		return mav;
 	}
 
 }
