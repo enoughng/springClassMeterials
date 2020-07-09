@@ -4,17 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	//1. 검색할 게시글 번호 추출
-	String seq = request.getParameter("seq");
-	
-	//2. 데이터베이스 연동 처리
-	BoardVO vo = new BoardVO();
-	vo.setSeq(Integer.parseInt(seq));
-	
-	BoardDAO boardDAO = new OracleBoardDAO();
-	BoardVO board = boardDAO.getBoard(vo);
-	
-	//3. 화면 네비게이션
+	BoardVO board = (BoardVO) session.getAttribute("board");
 %>
 <!DOCTYPE>
 <html>
@@ -24,9 +14,10 @@
 	</head>
 	<body>
 		<h1>글 상세보기</h1>
-		<a href="logoutProc.jsp">Log out</a><hr>
-		<form action="updateBoardProc.jsp" method="post">
-			<input type="hidden" name="seq" value=<%=board.getSeq() %>/>
+		<a href="logout.do">Log out</a><hr>
+		<form action="updateBoard.do" method="post">
+		<% System.out.println(board.getSeq()); %>
+			<input type="hidden" name="seq" value="<%=board.getSeq() %>"/>
 			<table border="1">
 				<tr>
 					<th>제목</th>
@@ -53,8 +44,8 @@
 				</tr>
 			</table>
 		</form><hr>
-		<a href="insertBoard.jsp">글등록</a>&nbsp;&nbsp;&nbsp;
-		<a href="deleteBoardProc.jsp?seq=<%=board.getSeq()%>">글삭제</a>&nbsp;&nbsp;&nbsp;
-		<a href="getBoardList.jsp">글목록</a>
+		<a href="insertBoard.do">글등록</a>&nbsp;&nbsp;&nbsp;
+		<a href="deleteBoard.do?seq=<%=board.getSeq()%>">글삭제</a>&nbsp;&nbsp;&nbsp;
+		<a href="getBoardList.do">글목록</a>
 	</body>
 </html>

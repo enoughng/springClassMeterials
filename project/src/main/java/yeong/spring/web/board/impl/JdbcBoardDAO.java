@@ -1,12 +1,16 @@
 package yeong.spring.web.board.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import yeong.spring.web.board.BoardDAO;
+import yeong.spring.web.board.BoardSQLStatement;
 import yeong.spring.web.board.BoardVO;
 
 @Repository
@@ -21,31 +25,30 @@ public class JdbcBoardDAO implements BoardDAO{
 
 	@Override
 	public void insertBoard(BoardVO vo) {
-		// TODO Auto-generated method stub
-		
+		BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(vo);
+		template.update(BoardSQLStatement.BOARD_INSERT, paramSource);
 	}
 
 	@Override
 	public void updateBoard(BoardVO vo) {
-		// TODO Auto-generated method stub
-		
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("title",vo.getTitle());
+		paramMap.put("content",vo.getContent());
+		template.update("UPDATE myboard SET title = :title, content = :content WHERE ", paramMap);
 	}
 
 	@Override
 	public void deleteBoard(BoardVO vo) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public BoardVO getBoard(BoardVO vo) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<BoardVO> getBoardList(BoardVO vo) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

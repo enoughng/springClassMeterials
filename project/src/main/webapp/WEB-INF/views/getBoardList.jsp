@@ -3,16 +3,7 @@
 <%@ page import="yeong.spring.web.board.impl.OracleBoardDAO"%>
 <%@ page import="yeong.spring.web.board.BoardVO"%>
 <%@ page import="java.util.List"%>
-<%
-	// 1. 사용자 입력 정보 추출 : 검색 기능은 나중에 구현
-	
-	// 2. 데이터베이스 연동 처리 BoardVO vo = new BoardVO();
-	BoardVO vo = new BoardVO();	
-	OracleBoardDAO boardDAO = new OracleBoardDAO();
-	List<BoardVO> boardList = boardDAO.getBoardList(vo);
-	
-	// 3. 화면 네비게이션
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,10 +13,10 @@
 <body>
 	<h1>글 목록</h1>
 	<h3>
-		테스트 회원님 환영합니다.<a href="logoutProc.jsp">Log-Out</a>
+		테스트 회원님 환영합니다.<a href="/board/logout">Log-Out</a>
 	</h3>
 	<!-- 검색 시작 -->
-	<form action="getBoardList.jsp" method="post">
+	<form action="${pageContext.request.contextPath}/board/getBoardList" method="post">
 		<table border="1">
 			<tr>
 				<td>
@@ -48,22 +39,17 @@
 			<th>등록일</th>
 			<th>조회수</th>
 		</tr>
-		<%
-			for (BoardVO board : boardList) {
-		%>
+		<c:forEach var="board" items="${boardList}">
 		<tr>
-			<td><%=board.getSeq()%></td>
-			<td><a href="getBoard.jsp?seq=<%=board.getSeq()%>"><%=board.getTitle()%></a>
+			<td>${board.seq}</td>
+			<td><a href="/board/getBoard?seq=${board.seq} ">${board.title}</a>
 			</td>
-			<td><%=board.getWriter()%></td>
-			<td><%=board.getRegDate()%></td>
-			<td><%=board.getCnt()%></td>
+			<td>${board.writer} </td>
+			<td>${board.regDate }</td>
+			<td>${board.cnt}</td>
 		</tr>
-		<%
-			}
-		%>
+		</c:forEach>
 	</table>
 	<br />
-	<a href="insertBoard.jsp">새글 작성</a>
-</body>
+  </body>
 </html>

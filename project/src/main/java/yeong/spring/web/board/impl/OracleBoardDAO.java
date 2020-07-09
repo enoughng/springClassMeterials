@@ -43,8 +43,8 @@ public class OracleBoardDAO implements BoardDAO{
 			conn = JDBCUtil.getConnection();
 			pstmt = conn.prepareStatement(BoardSQLStatement.BOARD_UPDATE);
 			pstmt.setString(1, vo.getTitle());
-			pstmt.setString(2, vo.getWriter());
-			pstmt.setString(3, vo.getContent());
+			pstmt.setString(2, vo.getContent());
+			pstmt.setInt(3, vo.getSeq());
 			pstmt.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();
