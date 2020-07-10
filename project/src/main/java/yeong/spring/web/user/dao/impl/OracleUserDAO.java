@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import org.springframework.stereotype.Repository;
+
 import yeong.spring.web.common.JDBCUtil;
 import yeong.spring.web.user.UserVO;
 import yeong.spring.web.user.dao.UserDAO;
 
+@Repository
 public class OracleUserDAO implements UserDAO{
 	private Connection con = null;
 	private PreparedStatement pstmt = null;

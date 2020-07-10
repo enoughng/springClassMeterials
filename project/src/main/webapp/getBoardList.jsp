@@ -13,7 +13,7 @@
 <body>
 	<h1>글 목록</h1>
 	<h3>
-		테스트 회원님 환영합니다.<a href="logout.do">Log-Out</a>
+		${userName} 테스트 회원님 환영합니다.<a href="logout.do">Log-Out</a>
 	</h3>
 	<!-- 검색 시작 -->
 	<form action="getBoardList.do" method="post">

@@ -13,11 +13,11 @@
 		<table border="1">
 			<tr>
 				<td>아이디</td>
-				<td><input type="text" name="id" /></td>
-			</tr>
+				<td><input type="text" name="id" value="${requestScope.userVO.id}"/></td>
+			</tr>	
 			<tr>
 				<td>비밀번호</td>
-				<td><input type="password" name="password" /></td>
+				<td><input type="password" name="password" value="${userVO.id}"/></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" value="로그인" /></td>

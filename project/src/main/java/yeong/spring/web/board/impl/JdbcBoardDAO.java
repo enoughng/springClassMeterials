@@ -13,7 +13,7 @@ import yeong.spring.web.board.BoardDAO;
 import yeong.spring.web.board.BoardSQLStatement;
 import yeong.spring.web.board.BoardVO;
 
-@Repository
+//@Repository
 public class JdbcBoardDAO implements BoardDAO{
 	
 	private JdbcTemplate template;
