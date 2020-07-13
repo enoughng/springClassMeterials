@@ -1,5 +1,5 @@
 <%@page import="yeong.spring.web.board.impl.OracleBoardDAO"%>
-<%@page import="yeong.spring.web.board.BoardDAO"%>
+<%@page import="yeong.spring.web.board.dao.BoardDAO"%>
 <%@page import="yeong.spring.web.board.BoardVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>

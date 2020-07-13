@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
 	
-	<context:component-scan base-package="yeong.spring.web"></context:component-scan>
+	<context:component-scan base-package="yeong.spring.web.board.controller"></context:component-scan>
 	
 	<!-- 
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -33,13 +33,11 @@
 	<bean id="logout" class="yeong.spring.web.user.LogoutController"></bean>
 	 -->
 	<!-- View Resolver -->
-	<!-- 
-	<bean id="viewResolver"
+	<!--  <bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
 		<property name="prefix" value="/WEB-INF/board/"></property>
 		<property name="suffix" value=".jsp"></property>	
-	</bean>
-	 -->
+	</bean>  -->
 	
 </beans>

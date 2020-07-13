@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import yeong.spring.web.board.BoardDAO;
 import yeong.spring.web.board.BoardSQLStatement;
 import yeong.spring.web.board.BoardVO;
+import yeong.spring.web.board.dao.BoardDAO;
 import yeong.spring.web.common.JDBCUtil;
 
 @Repository("boardDAO")

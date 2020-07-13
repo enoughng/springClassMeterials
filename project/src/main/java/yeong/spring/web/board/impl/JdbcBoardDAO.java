@@ -7,11 +7,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.stereotype.Repository;
 
-import yeong.spring.web.board.BoardDAO;
 import yeong.spring.web.board.BoardSQLStatement;
 import yeong.spring.web.board.BoardVO;
+import yeong.spring.web.board.dao.BoardDAO;
 
 //@Repository
 public class JdbcBoardDAO implements BoardDAO{
