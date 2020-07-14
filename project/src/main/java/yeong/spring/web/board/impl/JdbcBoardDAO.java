@@ -48,6 +48,10 @@ public class JdbcBoardDAO implements BoardDAO{
 
 	@Override
 	public List<BoardVO> getBoardList(BoardVO vo) {
+		Object[] args = { vo.getSearchKeyword()};
+		if(vo.getSearchCondition().equals("title")) {
+			return template.query(BoardSQLStatement.BOARD_LIST_T, args, new BoardRowMapper());
+		}
 		return null;
 	}
 	

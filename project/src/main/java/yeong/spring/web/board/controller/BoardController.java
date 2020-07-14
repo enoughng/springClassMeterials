@@ -1,18 +1,24 @@
 package yeong.spring.web.board.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import yeong.spring.web.board.BoardListVO;
 import yeong.spring.web.board.BoardVO;
 import yeong.spring.web.board.service.BoardService;
 
@@ -33,9 +39,15 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/insertBoard.do")
-	public String insertBoard(BoardVO vo) throws IOException {
+	public String insertBoard(BoardVO vo, HttpServletRequest request) throws IOException {
 		
 		System.out.println("글 등록 처리");
+		MultipartFile uploadFile = vo.getUploadFile();
+		System.out.println(request.getServletContext().getRealPath("/")); // 경로명
+		if(!uploadFile.isEmpty()) {
+			String fileName = uploadFile.getOriginalFilename(); // 사용자가 올린 파일명
+			uploadFile.transferTo(new File("c:/myProject/" + fileName));
+		}
 		boardService.insertBoard(vo);
 		return "getBoardList.do";
 	}
@@ -72,10 +84,27 @@ public class BoardController {
 	@RequestMapping("/getBoardList.do")
 	public String getBoardList(BoardVO vo,	 ModelAndView mav, Model model, Map<String, String> map) throws IOException {
 		System.out.println("글 목록 보기 처리");
+		if(vo.getSearchCondition() == null) vo.setSearchCondition("title");
+		if(vo.getSearchKeyword() == null) vo.setSearchKeyword("");
 		System.out.println("검색조건: "  + vo.getSearchCondition());
 		System.out.println("검색단어: " + vo.getSearchKeyword());
 		List<BoardVO> boardList = boardService.getBoardList(vo);
 		model.addAttribute("boardList", boardList);
 		return "getBoardList.jsp";
+	}
+	@RequestMapping("/dataTransform.do")
+	@ResponseBody
+	public BoardListVO dataTransform(BoardVO vo) throws IOException {
+		System.out.println("글 목록 보기 처리");
+		vo.setSearchCondition("title");
+		vo.setSearchKeyword("");
+		
+		System.out.println("검색조건: "  + vo.getSearchCondition());
+		System.out.println("검색단어: " + vo.getSearchKeyword());
+		List<BoardVO> boardList = boardService.getBoardList(vo);
+		BoardListVO boardListVO = new BoardListVO();
+		boardListVO.setBoardList(boardList);
+		
+		return boardListVO;
 	}
 }

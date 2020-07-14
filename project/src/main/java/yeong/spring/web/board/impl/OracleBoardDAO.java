@@ -15,12 +15,11 @@ import yeong.spring.web.board.dao.BoardDAO;
 import yeong.spring.web.common.JDBCUtil;
 
 @Repository("boardDAO")
-public class OracleBoardDAO implements BoardDAO{
+public class OracleBoardDAO implements BoardDAO {
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
-	
-	
+
 	public void insertBoard(BoardVO vo) {
 		System.out.println("JDBC로 insertBoard() 기능 처리");
 		try {
@@ -30,13 +29,13 @@ public class OracleBoardDAO implements BoardDAO{
 			pstmt.setString(2, vo.getWriter());
 			pstmt.setString(3, vo.getContent());
 			pstmt.executeUpdate();
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			JDBCUtil.close(conn, pstmt, rs);
 		}
 	}
-	
+
 	public void updateBoard(BoardVO vo) {
 		System.out.println("JDBC로 updateBoard() 기능 처리");
 		try {
@@ -46,12 +45,13 @@ public class OracleBoardDAO implements BoardDAO{
 			pstmt.setString(2, vo.getContent());
 			pstmt.setInt(3, vo.getSeq());
 			pstmt.executeUpdate();
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			JDBCUtil.close(conn, pstmt);
 		}
 	}
+
 	public void deleteBoard(BoardVO vo) {
 		System.out.println("JDBC로 deleteBoard() 기능 처리");
 		try {
@@ -59,12 +59,13 @@ public class OracleBoardDAO implements BoardDAO{
 			pstmt = conn.prepareStatement(BoardSQLStatement.BOARD_DELETE);
 			pstmt.setInt(1, vo.getSeq());
 			pstmt.executeUpdate();
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			JDBCUtil.close(conn, pstmt);
 		}
 	}
+
 	public BoardVO getBoard(BoardVO vo) {
 		System.out.println("JDBC로 getBoard() 기능 처리");
 		BoardVO board = null;
@@ -73,7 +74,7 @@ public class OracleBoardDAO implements BoardDAO{
 			pstmt = conn.prepareStatement(BoardSQLStatement.BOARD_GET);
 			pstmt.setInt(1, vo.getSeq());
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				board = new BoardVO();
 				board.setSeq(rs.getInt("seq"));
 				board.setTitle(rs.getString("title"));
@@ -82,22 +83,28 @@ public class OracleBoardDAO implements BoardDAO{
 				board.setRegDate(rs.getDate("regdate"));
 				board.setCnt(rs.getInt("cnt"));
 			}
-			
-		} catch(SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JDBCUtil.close(conn, pstmt);
+			JDBCUtil.close(conn, pstmt, rs);
 		}
 		return board;
 	}
+
 	public List<BoardVO> getBoardList(BoardVO vo) {
 		System.out.println("JDBC로 getBoardList() 기능 처리");
 		List<BoardVO> boardList = new ArrayList<BoardVO>();
 		try {
 			conn = JDBCUtil.getConnection();
-			pstmt = conn.prepareStatement(BoardSQLStatement.BOARD_LIST);
+			if (vo.getSearchCondition().toLowerCase().equals("title")) {
+				pstmt = conn.prepareStatement(BoardSQLStatement.BOARD_LIST_T);
+			} else if (vo.getSearchCondition().toLowerCase().equals("content")) {
+				pstmt = conn.prepareStatement(BoardSQLStatement.BOARD_LIST_C);
+			}
+			pstmt.setString(1, vo.getSearchKeyword());
 			rs = pstmt.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				BoardVO board = new BoardVO();
 				board.setSeq(rs.getInt("seq"));
 				board.setTitle(rs.getString("title"));
@@ -107,21 +114,21 @@ public class OracleBoardDAO implements BoardDAO{
 				board.setCnt(rs.getInt("cnt"));
 				boardList.add(board);
 			}
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JDBCUtil.close(conn, pstmt);
+			JDBCUtil.close(conn, pstmt, rs);
 		}
 		return boardList;
 	}
-	
+
 	public void deleteAllBoard(BoardVO vo) {
 		System.out.println("날린다.");
 		try {
 			conn = JDBCUtil.getConnection();
 			pstmt = conn.prepareStatement("DELETE FROM myboard");
 			pstmt.executeUpdate();
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			JDBCUtil.close(conn, pstmt);
