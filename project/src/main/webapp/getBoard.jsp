@@ -1,11 +1,5 @@
-<%@page import="yeong.spring.web.board.impl.OracleBoardDAO"%>
-<%@page import="yeong.spring.web.board.BoardVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	// 세션에 저장한 게시글 정보를 추출한다.
-	BoardVO board = (BoardVO) session.getAttribute("board");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +12,9 @@
 	<form action="updateBoard.do" method="post">
 		<input name="seq" type="hidden" value="${board.seq}" />
 		<table border="1">
+			<tr>
+				<td colspan="2"><a href="resources/upload/${filename}">${filename}</a><br/></td>
+			</tr>
 			<tr>
 				<td>제목</td>
 				<td><input name="title" type="text" value="${board.title }" /></td>

@@ -1,6 +1,3 @@
-<%@page import="java.util.List"%>
-<%@page import="yeong.spring.web.board.impl.OracleBoardDAO"%>
-<%@page import="yeong.spring.web.board.BoardVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -22,8 +19,8 @@
 				<td><select name="searchCondition">
 						<option value="TITLE">제목</option>
 						<option value="CONTENT">내용</option>
-				</select> <input type="text" name="searchKeyword" /> <input type="submit"
-					value="검색" /></td>
+				</select> <input type="text" name="searchKeyword" /> 
+				<input type="submit" value="검색" /></td>
 			</tr>
 		</table>
 	</form>

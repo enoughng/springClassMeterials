@@ -24,6 +24,9 @@ public class LoginController {
 	public String login(UserVO vo, HttpSession session) {
 		System.out.println("로그인 처리");
 		// 1. 사용자 입력 정보 추출 
+		
+		if(vo.getId() == null || vo.getId().equals("")) throw new IllegalAccessError("아이디는 반드시 입력해야 합니다.");
+		
 		UserDAO userDAO = new OracleUserDAO();
 		UserVO user = userDAO.getUser(vo);
 		
