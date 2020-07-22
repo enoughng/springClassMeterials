@@ -13,6 +13,7 @@ public class BoardListVO {
 	@XmlElement(name = "board")
 	private List<BoardVO> boardList;
 
+	
 	public List<BoardVO> getBoardList() {
 		return boardList;
 	}

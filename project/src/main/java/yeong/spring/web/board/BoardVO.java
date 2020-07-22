@@ -2,18 +2,19 @@ package yeong.spring.web.board;
 
 import java.sql.Date;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(name = "myboard")
 public class BoardVO {
-	@XmlAttribute
+	@Id
+	@GeneratedValue
 	private int seq;
 	private String title;
 	private String writer;
@@ -21,18 +22,23 @@ public class BoardVO {
 	private Date regDate;
 	private int cnt;
 	
-	@JsonIgnore
-	@XmlTransient
+	@Transient
 	private String searchCondition;
-	@JsonIgnore
-	@XmlTransient
+	@Transient
 	private String searchKeyword;
-	
-	@JsonIgnore
-	@XmlTransient
+	@Transient
 	private MultipartFile uploadFile;
 
 	
+	/**
+	 * @메소드이름 : getUploadFile
+	 * @작성일 : 2020. 7. 21.
+	 * @작성자 : Yeong
+	 * @Param :
+	 * @return :  
+	 * @Method설명 : 
+	 *
+	 */
 	public MultipartFile getUploadFile() {
 		return uploadFile;
 	}

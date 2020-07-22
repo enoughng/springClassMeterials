@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import yeong.spring.web.board.BoardDAO;
 import yeong.spring.web.board.BoardVO;
 
-@Repository
 public class BoardDAOMybatis implements BoardDAO{
 	
 	@Autowired
